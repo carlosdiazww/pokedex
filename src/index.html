@@ -35,18 +35,15 @@
             letter-spacing: 1px;
         }
 
-        /* Envoltorio principal */
+        /* Envoltorio principal centrado */
         .wrapper {
-            max-width: 1000px;
-            margin: 20px auto;
+            max-width: 800px;
+            margin: 30px auto;
             padding: 0 15px;
+            text-align: center;
         }
 
         /* Caja de Título POKÉDEX */
-        .header-title {
-            text-align: center;
-            margin-bottom: 25px;
-        }
         .title-box {
             background: white;
             border: 3px solid #222;
@@ -54,6 +51,7 @@
             padding: 12px 30px;
             display: inline-block;
             box-shadow: 3px 3px 0px #222;
+            margin-bottom: 30px;
         }
         .title-box h1 {
             margin: 0;
@@ -68,64 +66,11 @@
             font-weight: bold;
         }
 
-        /* Barra de conteo y ordenamiento superior */
-        .controls-top {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-            font-weight: bold;
-        }
-        .controls-top select {
-            font-family: inherit;
-            padding: 4px 8px;
-            border-radius: 6px;
-            border: 2px solid #222;
-            background: white;
-        }
-
-        /* Layout de Filtro y Cuadrícula */
-        .main-content {
-            display: flex;
-            gap: 20px;
-            align-items: flex-start;
-        }
-
-        /* Panel lateral de filtros */
-        .filter-panel {
-            width: 220px;
-            background: white;
-            border: 3px solid #222;
-            border-radius: 12px;
-            padding: 15px;
-            box-shadow: 3px 3px 0px #222;
-            flex-shrink: 0;
-        }
-        .filter-group {
-            margin-bottom: 15px;
-        }
-        .filter-group label {
-            display: block;
-            font-size: 12px;
-            font-weight: bold;
-            margin-bottom: 5px;
-        }
-        .filter-group select,
-        .filter-group input {
-            width: 100%;
-            padding: 6px;
-            font-family: inherit;
-            border: 2px solid #222;
-            border-radius: 8px;
-            background: #fafafa;
-        }
-
         /* Cuadrícula de Pokémon */
         .pokemon-grid {
-            flex-grow: 1;
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 15px;
+            gap: 20px;
         }
 
         /* Tarjeta Pokémon estilo retro */
@@ -133,7 +78,7 @@
             background: white;
             border: 3px solid #222;
             border-radius: 12px;
-            padding: 15px;
+            padding: 20px;
             text-align: center;
             box-shadow: 3px 3px 0px #222;
             transition: transform 0.15s ease-in-out;
@@ -142,34 +87,28 @@
             transform: translateY(-3px);
         }
         .pokemon-card img {
-            width: 80px;
-            height: 80px;
+            width: 90px;
+            height: 90px;
             image-rendering: pixelated;
         }
         .pokemon-card .num {
             display: block;
             font-weight: bold;
             font-size: 14px;
-            color: #444;
-            margin-top: 5px;
+            color: #555;
+            margin-top: 8px;
         }
         .pokemon-card .name {
             display: block;
-            font-size: 13px;
+            font-size: 15px;
             font-weight: bold;
             text-transform: uppercase;
             letter-spacing: 1px;
-            margin-top: 2px;
+            margin-top: 4px;
         }
 
         /* Responsive */
-        @media (max-width: 768px) {
-            .main-content {
-                flex-direction: column;
-            }
-            .filter-panel {
-                width: 100%;
-            }
+        @media (max-width: 600px) {
             .pokemon-grid {
                 grid-template-columns: repeat(2, 1fr);
             }
@@ -187,70 +126,25 @@
 
     <div class="wrapper">
         <!-- Título Pokédex -->
-        <div class="header-title">
-            <div class="title-box">
-                <h1>POKÉDEX</h1>
-                <p>1996 - 2005</p>
-            </div>
+        <div class="title-box">
+            <h1>POKÉDEX</h1>
+            <p>1996 - 2005</p>
         </div>
 
-        <!-- Barra superior de contador y ordenamiento -->
-        <div class="controls-top">
-            <div><span id="results-count">12</span> results</div>
-            <div>
-                Order by: 
-                <select id="sort-select">
-                    <option value="number">Number ↗️</option>
-                    <option value="name">Name A-Z</option>
-                </select>
-            </div>
-        </div>
-
-        <div class="main-content">
-            <!-- Panel Lateral de Filtros -->
-            <div class="filter-panel">
-                <div class="filter-group">
-                    <label>Version:</label>
-                    <select>
-                        <option>Green</option>
-                        <option>Red</option>
-                        <option>Blue</option>
-                        <option>Yellow</option>
-                    </select>
-                </div>
-                <div class="filter-group">
-                    <label>PKMN Name:</label>
-                    <input type="text" id="search-input" placeholder="Buscar..." />
-                </div>
-                <div class="filter-group">
-                    <label>PKMN Type:</label>
-                    <select id="type-select">
-                        <option value="all">All</option>
-                        <option value="grass">Grass</option>
-                        <option value="fire">Fire</option>
-                        <option value="water">Water</option>
-                        <option value="bug">Bug</option>
-                    </select>
-                </div>
-            </div>
-
-            <!-- Cuadrícula de Pokémon -->
-            <div class="pokemon-grid" id="pokemon-grid">
-                <p>Cargando Pokédex...</p>
-            </div>
+        <!-- Cuadrícula limpia de Pokémon -->
+        <div class="pokemon-grid" id="pokemon-grid">
+            <p>Cargando Pokémon...</p>
         </div>
     </div>
 
     <script>
-        let allPokemon = [];
-
-        // Cambiamos el límite a solo 12 Pokémon para que se vea más limpio
         async function fetchPokemon() {
             try {
+                // Cargamos los primeros 12 Pokémon para una vista limpia
                 const response = await fetch('https://pokeapi.co/api/v2/pokemon?limit=12');
                 const data = await response.json();
                 
-                allPokemon = data.results.map((pokemon, index) => {
+                const pokemonList = data.results.map((pokemon, index) => {
                     const id = index + 1;
                     const paddedId = String(id).padStart(3, '0');
                     return {
@@ -261,41 +155,20 @@
                     };
                 });
 
-                renderPokemon(allPokemon);
+                const grid = document.getElementById('pokemon-grid');
+                grid.innerHTML = pokemonList.map(pokemon => `
+                    <div class="pokemon-card">
+                        <img src="${pokemon.image}" alt="${pokemon.name}">
+                        <span class="num">${pokemon.formattedId}</span>
+                        <span class="name">${pokemon.name}</span>
+                    </div>
+                `).join('');
+
             } catch (error) {
                 console.error("Error al cargar los Pokémon:", error);
                 document.getElementById('pokemon-grid').innerHTML = "<p>Error al cargar los datos.</p>";
             }
         }
-
-        function renderPokemon(pokemonList) {
-            const grid = document.getElementById('pokemon-grid');
-            document.getElementById('results-count').innerText = pokemonList.length;
-            
-            grid.innerHTML = pokemonList.map(pokemon => `
-                <div class="pokemon-card">
-                    <img src="${pokemon.image}" alt="${pokemon.name}">
-                    <span class="num">${pokemon.formattedId}</span>
-                    <span class="name">${pokemon.name}</span>
-                </div>
-            `).join('');
-        }
-
-        document.getElementById('search-input').addEventListener('input', (e) => {
-            const searchTerm = e.target.value.toLowerCase();
-            const filtered = allPokemon.filter(p => p.name.toLowerCase().includes(searchTerm));
-            renderPokemon(filtered);
-        });
-
-        document.getElementById('sort-select').addEventListener('change', (e) => {
-            let sorted = [...allPokemon];
-            if (e.target.value === 'name') {
-                sorted.sort((a, b) => a.name.localeCompare(b.name));
-            } else {
-                sorted.sort((a, b) => a.id - b.id);
-            }
-            renderPokemon(sorted);
-        });
 
         fetchPokemon();
     </script>
