@@ -2,17 +2,127 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Mi Pokédex - Azure</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pokédex Retro</title>
     <style>
-        body { font-family: Arial, sans-serif; text-align: center; margin-top: 50px; background-color: #f4f4f9; }
-        h1 { color: #e3350d; }
-        .card { background: white; padding: 30px; display: inline-block; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Courier New', Courier, monospace;
+            background: linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%);
+            min-height: 100vh;
+        }
+        /* Barra superior roja */
+        .top-bar {
+            background-color: #e3350d;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: flex-end;
+            gap: 25px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        .top-bar a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 16px;
+        }
+        /* Contenedor principal */
+        .container {
+            max-width: 900px;
+            margin: 30px auto;
+            padding: 20px;
+            text-align: center;
+        }
+        /* Título clásico */
+        .pokedex-title-box {
+            background: white;
+            border: 4px solid #333;
+            border-radius: 12px;
+            padding: 15px;
+            display: inline-block;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+            margin-bottom: 30px;
+        }
+        .pokedex-title-box h1 {
+            margin: 0;
+            font-size: 36px;
+            letter-spacing: 3px;
+            color: #222;
+        }
+        .pokedex-title-box p {
+            margin: 5px 0 0 0;
+            font-size: 14px;
+            color: #666;
+        }
+        /* Cuadrícula de Pokémon */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+        .card {
+            background: white;
+            border: 3px solid #333;
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: transform 0.2s;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        .card img {
+            width: 96px;
+            height: 96px;
+            image-rendering: pixelated; /* Da un aspecto retro nítido */
+        }
+        .card h3 {
+            margin: 10px 0 5px 0;
+            font-size: 16px;
+            color: #333;
+        }
+        .card span {
+            font-size: 14px;
+            color: #777;
+        }
     </style>
 </head>
 <body>
-    <div class="card">
-        <h1>¡Mi Pokédex ya está en Azure! ⚡</h1>
-        <p>El despliegue automático funciona a la perfección.</p>
+
+    <!-- Barra superior -->
+    <div class="top-bar">
+        <a href="#">HOME</a>
+        <a href="#">ABOUT</a>
+        <a href="#">GitHub</a>
     </div>
+
+    <div class="container">
+        <!-- Título estilo clásico -->
+        <div class="pokedex-title-box">
+            <h1>POKÉDEX</h1>
+            <p>⚡ 1996 - 2005 ⚡</p>
+        </div>
+
+        <!-- Tarjetas de ejemplo -->
+        <div class="grid">
+            <div class="card">
+                <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png" alt="Bulbasaur">
+                <span>001</span>
+                <h3>BULBASAUR</h3>
+            </div>
+            <div class="card">
+                <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/4.png" alt="Charmander">
+                <span>004</span>
+                <h3>CHARMANDER</h3>
+            </div>
+            <div class="card">
+                <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/7.png" alt="Squirtle">
+                <span>007</span>
+                <h3>SQUIRTLE</h3>
+            </div>
+        </div>
+    </div>
+
 </body>
 </html>
