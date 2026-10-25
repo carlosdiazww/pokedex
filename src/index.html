@@ -133,45 +133,40 @@
 
         <!-- Cuadrícula limpia de Pokémon -->
         <div class="pokemon-grid" id="pokemon-grid">
-            <p>Cargando Pokémon...</p>
+            <!-- Las tarjetas se cargarán automáticamente aquí -->
         </div>
     </div>
 
     <script>
-        async function fetchPokemon() {
-            try {
-                // Cargamos los primeros 12 Pokémon para una vista limpia
-                const response = await fetch('https://pokeapi.co/api/v2/pokemon?limit=12');
-                const data = await response.json();
-                
-                const pokemonList = data.results.map((pokemon, index) => {
-                    const id = index + 1;
-                    const paddedId = String(id).padStart(3, '0');
-                    return {
-                        id: id,
-                        formattedId: paddedId,
-                        name: pokemon.name,
-                        image: https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png
-                    };
-                });
+        // Lista fija oficial de los primeros 12 Pokémon para garantizar carga inmediata sin errores de red
+        const pokemonList = [
+            { id: 1, name: "bulbasaur" },
+            { id: 2, name: "ivysaur" },
+            { id: 3, name: "venusaur" },
+            { id: 4, name: "charmander" },
+            { id: 5, name: "charmeleon" },
+            { id: 6, name: "charizard" },
+            { id: 7, name: "squirtle" },
+            { id: 8, name: "wartortle" },
+            { id: 9, name: "blastoise" },
+            { id: 10, name: "caterpie" },
+            { id: 11, name: "metapod" },
+            { id: 12, name: "butterfree" }
+        ];
 
-                const grid = document.getElementById('pokemon-grid');
-                grid.innerHTML = pokemonList.map(pokemon => `
-                    <div class="pokemon-card">
-                        <img src="${pokemon.image}" alt="${pokemon.name}">
-                        <span class="num">${pokemon.formattedId}</span>
-                        <span class="name">${pokemon.name}</span>
-                    </div>
-                `).join('');
-
-            } catch (error) {
-                console.error("Error al cargar los Pokémon:", error);
-                document.getElementById('pokemon-grid').innerHTML = "<p>Error al cargar los datos.</p>";
-            }
-        }
-
-        fetchPokemon();
+        const grid = document.getElementById('pokemon-grid');
+        
+        grid.innerHTML = pokemonList.map(p => {
+            const paddedId = String(p.id).padStart(3, '0');
+            const imageUrl = https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${p.id}.png;
+            return `
+                <div class="pokemon-card">
+                    <img src="${imageUrl}" alt="${p.name}">
+                    <span class="num">${paddedId}</span>
+                    <span class="name">${p.name}</span>
+                </div>
+            `;
+        }).join('');
     </script>
 </body>
 </html>
- 
