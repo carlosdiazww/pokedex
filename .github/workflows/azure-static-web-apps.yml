@@ -1,20 +1,29 @@
-name: Despliegue PokeDex en Azure Static Web Apps
+name: Azure Static Web Apps CI/CD
 
 on:
   push:
-    branches: [main]
+    branches:
+      - main
+  pull_request:
+    types: [opened, synchronize, reopened, closed]
+    branches:
+      - main
   workflow_dispatch:
 
 jobs:
   build_and_deploy_job:
+    if: github.event_name == 'push' || github.event_name == 'workflow_dispatch' || (github.event_name == 'pull_request' && github.event.action != 'closed')
     runs-on: ubuntu-latest
+    name: Build and Deploy Job
     env:
       HUSKY: 0
     steps:
-      - name: Descargar el código
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          submodules: true
+          lfs: false
 
-      - name: Configurar Node.js 20
+      - name: Configurar Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
@@ -23,27 +32,39 @@ jobs:
       - name: Instalar dependencias
         run: npm ci
 
-      - name: Compilar Angular (producción)
+      - name: Compilar Angular
         run: npm run build
 
-      - name: Ajustar index.html para la CSP
+      - name: Ajustar index.html generado
         run: node preparar-index.js
 
-      - name: Copiar imágenes a la ruta /pokedex-angular/assets que usa environment.prod.ts
-        run: |
-          mkdir -p dist/pokedex-angular/pokedex-angular
-          cp -r dist/pokedex-angular/assets dist/pokedex-angular/pokedex-angular/
+      - name: Copia de assets en la ruta heredada /pokedex-angular/assets
+        run: mkdir -p dist/pokedex-angular/pokedex-angular && cp -r dist/pokedex-angular/assets dist/pokedex-angular/pokedex-angular/
 
-      - name: Copiar configuración de Static Web Apps
+      - name: Copiar staticwebapp.config.json
         run: cp staticwebapp.config.json dist/pokedex-angular/
 
-      - name: Publicar en Azure
+      - name: Build And Deploy
+        id: builddeploy
         uses: Azure/static-web-apps-deploy@v1
         with:
           azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN }}
-          action: upload
-          app_location: dist/pokedex-angular
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          action: "upload"
+          app_location: "dist/pokedex-angular"
           api_location: ""
           output_location: ""
           skip_app_build: true
           skip_api_build: true
+
+  close_pull_request_job:
+    if: github.event_name == 'pull_request' && github.event.action == 'closed'
+    runs-on: ubuntu-latest
+    name: Close Pull Request Job
+    steps:
+      - name: Close Pull Request
+        id: closepullrequest
+        uses: Azure/static-web-apps-deploy@v1
+        with:
+          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN }}
+          action: "close"
